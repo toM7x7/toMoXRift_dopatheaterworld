@@ -30,8 +30,12 @@ export function ProjectorBeam() {
 
   // Rebuild when the picture size changes (letterboxing).
   const lastSize = useRef(new THREE.Vector2(-1, -1))
+  const meshRef = useRef<THREE.Mesh>(null)
   useFrame(() => {
-    const size = engine.uniforms.uScreenSize.value
+    const u = engine.uniforms
+    // No beam to see (no show, or the light is off): skip the fragment work entirely.
+    if (meshRef.current) meshRef.current.visible = u.uBeam.value * u.uActive.value * u.uLevel.value > 1e-3
+    const size = u.uScreenSize.value
     if (size.equals(lastSize.current)) return
     lastSize.current.copy(size)
     const c = new THREE.Vector3(...SCREEN.center)
@@ -59,7 +63,7 @@ export function ProjectorBeam() {
     geometry.computeBoundingSphere()
   })
 
-  return <mesh geometry={geometry} material={material} renderOrder={3} />
+  return <mesh ref={meshRef} geometry={geometry} material={material} renderOrder={3} />
 }
 
 const DUST_COUNT = 700

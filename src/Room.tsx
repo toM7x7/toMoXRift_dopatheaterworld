@@ -90,10 +90,9 @@ type MaterialFor = (source: THREE.Material | THREE.Material[], keep?: boolean) =
 function useMaterialMap(): MaterialFor {
   const { engine } = useAmbient()
   const cache = useMemo(() => new Map<string, THREE.Material>(), [engine])
-  useEffect(() => () => {
-    cache.forEach((m) => m.dispose())
-    cache.clear()
-  }, [cache])
+  // Dispose but keep the entries: after a StrictMode cleanup the meshes still use these materials
+  // (three rebuilds them on next use), and the final unmount must still find them to free them.
+  useEffect(() => () => cache.forEach((m) => m.dispose()), [cache])
   return (source, keep = false) => {
     const src = (Array.isArray(source) ? source[0] : source) as THREE.MeshStandardMaterial
     const name = src.name
@@ -239,7 +238,7 @@ function Projector({ meshes, lens, material }: ProjectorProps) {
     <Interactable
       id="ambient-cinema-projector"
       onInteract={cycleLevel}
-      interactionText={`光の演出：${LEVELS[levelIndex].label}（自分の見え方だけ切り替え）`}
+      interactionText={`光の強さ：${LEVELS[levelIndex].label}（自分の見え方だけ切り替え）`}
     >
       <group>
         {meshes.map((m) => (

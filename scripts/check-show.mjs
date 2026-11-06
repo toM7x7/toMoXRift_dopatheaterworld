@@ -69,6 +69,15 @@ for (let i = 0; i < 3; i++) { await page.evaluate(() => window.__ambient.cycleLe
 console.log('level', await page.evaluate(() => window.__ambient.engine.uniforms.uLevel.value))
 await wait(3.5); await log('level off')
 
+// The host keeps the element but the track ends: same as the share ending (grace, then back).
+await page.evaluate(() => window.__ambient.cycleLevel()) // 切 → 標準
+await wait(6); await log('level back on')
+await page.evaluate(() => window.__ambient.engine.video.image.srcObject.getVideoTracks().forEach((t) => t.stop()))
+await wait(1); await log('track ended')
+await shot('show-8-track-ended')
+await wait(3); await log('track grace over')
+await wait(3.5); await log('track returned')
+
 // The projector stays solid with everything else gone.
 await page.goto(`${BASE}?nopanel&clean&nofakes&play=1&immerse=1&scene=1&cam=2.2,3.1,7.6,0,3.2,10.4`)
 await page.waitForFunction(() => window.__ambient?.engine?.show.progress >= 1, null, { timeout: 60000 })

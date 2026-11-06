@@ -28,7 +28,7 @@ function makePlaceholder(connected: boolean): THREE.CanvasTexture {
   ctx.textBaseline = 'middle'
   ctx.fillStyle = '#d9c9a3'
   ctx.font = '600 64px "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif'
-  ctx.fillText(connected ? 'スクリーンを選んで画面共有' : '音声通話につながると画面共有できます', 640, 320)
+  ctx.fillText(connected ? 'スクリーンを選ぶと画面共有できます' : '音声通話につながると画面共有できます', 640, 320)
   ctx.fillStyle = '#8f8a99'
   ctx.font = '400 36px "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif'
   ctx.fillText('映像の色がスクリーンの外へ広がり、部屋じゅうを染めます', 640, 410)
@@ -108,10 +108,14 @@ export function CinemaScreen() {
   const connected = share?.isRoomConnected ?? false
   const placeholder = useMemo(() => makePlaceholder(connected), [connected])
   useEffect(() => () => placeholder.dispose(), [placeholder])
-  // A share that drops for a moment leaves a black screen, not the "start sharing" card.
+  // The picture shows only while the engine counts the share as live (an ended track is not), and
+  // a share that drops for a moment leaves a black screen, not the "start sharing" card.
+  const videoRef = useRef<THREE.Mesh>(null)
   const placeholderRef = useRef<THREE.Mesh>(null)
   useFrame(() => {
-    if (placeholderRef.current) placeholderRef.current.visible = !texture && !engine.holding
+    const live = !!texture && engine.show.present
+    if (videoRef.current) videoRef.current.visible = live
+    if (placeholderRef.current) placeholderRef.current.visible = !live && !engine.holding
   })
 
   const sharing = share?.isSharing ?? false
@@ -134,7 +138,7 @@ export function CinemaScreen() {
           <planeGeometry args={[SCREEN.width, SCREEN.height]} />
           <meshBasicMaterial color="#050506" toneMapped={false} polygonOffset polygonOffsetFactor={1} polygonOffsetUnits={1} />
         </mesh>
-        <mesh visible={!!texture}>
+        <mesh ref={videoRef} visible={!!texture}>
           <planeGeometry args={[size[0], size[1]]} />
           <meshBasicMaterial map={texture} toneMapped={false} />
         </mesh>

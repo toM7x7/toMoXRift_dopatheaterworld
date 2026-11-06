@@ -94,7 +94,8 @@ vec3 projectAt(vec3 P, out float weight) {
 }
 /** What the screen wall emits at q: the picture itself inside, the halo outside. */
 vec3 wallAt(vec2 q, float soft) {
-  vec2 e = smoothstep(vec2(0.5 + soft), vec2(0.5 - soft), abs(q));
+  // 1 - smoothstep(lo, hi): GLSL leaves smoothstep undefined when edge0 > edge1.
+  vec2 e = 1.0 - smoothstep(vec2(0.5 - soft), vec2(0.5 + soft), abs(q));
   float inside = e.x * e.y;
   return mix(haloAt(q) * 0.6, glowAt(q + 0.5), inside);
 }
@@ -541,7 +542,7 @@ const DUST_FRAG = /* glsl */ `
 varying vec3 vColor;
 void main() {
   vec2 d = gl_PointCoord - 0.5;
-  float a = smoothstep(0.5, 0.0, length(d));
+  float a = 1.0 - smoothstep(0.0, 0.5, length(d));
   gl_FragColor = vec4(vColor * a, 1.0);
   #include <colorspace_fragment>
 }

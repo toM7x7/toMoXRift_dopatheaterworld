@@ -66,8 +66,9 @@ function sourceAlive(texture: THREE.Texture): boolean {
   if (!v || typeof v !== 'object' || !('videoWidth' in v)) return true
   const stream = v.srcObject as { getVideoTracks?: () => { readyState: string }[] } | null
   if (stream && typeof stream.getVideoTracks === 'function') {
-    const tracks = stream.getVideoTracks()
-    return tracks.length === 0 || tracks.some((t) => t.readyState !== 'ended')
+    // No video track (not arrived yet, or removed) counts as no share: at the start nothing lights
+    // up until it arrives, mid-show the grace period starts.
+    return stream.getVideoTracks().some((t) => t.readyState !== 'ended')
   }
   return !!(v.currentSrc || v.src)
 }
@@ -283,6 +284,7 @@ export class AmbientEngine {
   private readonly probeMat = pass(PROBE_FRAG, { uSrc: { value: null } })
   private sinceUpdate = 0
   private sinceProbe = 0
+  private lastTime: number | null = null
   private probeBusy = false
   private readonly probeBuffer = new Uint8Array(16)
   private flip = false
@@ -350,8 +352,11 @@ export class AmbientEngine {
     this.draw(gl, this.blendMat, next)
   }
 
-  /** Push settings into the shared uniforms (cheap; call every frame). */
-  private applySettings(dt: number) {
+  /**
+   * Push settings into the shared uniforms (cheap; call every frame). `dt` is clamped for smooth
+   * fades; `realDt` is wall-clock time so the share timers stay true after a hidden tab or a slow frame.
+   */
+  private applySettings(dt: number, realDt: number) {
     const s = this.settings
     const u = this.uniforms
     u.uSat.value = s.saturation
@@ -363,7 +368,7 @@ export class AmbientEngine {
     u.uGloss.value = s.gloss
     u.uRoughness.value = s.roughness
     u.uBeam.value = s.beam
-    this.updateShow(dt)
+    this.updateShow(realDt)
     const target = this.show.lit ? 1 : 0
     u.uActive.value += (target - u.uActive.value) * (1 - Math.exp(-dt / 0.9))
     if (Math.abs(target - u.uActive.value) < 1e-3) u.uActive.value = target
@@ -407,13 +412,18 @@ export class AmbientEngine {
     return !this.show.present && this.show.lit
   }
 
+  /** @param dt clamped frame time; @param time clock time in seconds (wall clock). */
   tick(gl: THREE.WebGLRenderer, dt: number, time: number) {
+    const realDt = this.lastTime === null ? dt : Math.max(0, time - this.lastTime)
+    this.lastTime = time
     this.uniforms.uTime.value = time
-    this.applySettings(dt)
+    this.applySettings(dt, realDt)
     this.sinceUpdate += dt
     this.sinceProbe += dt
     // No live picture: keep the last blurred pictures and colours (held light during a gap).
     if (!this.video || !this.show.present) return
+    // Light switched off (切): everything it feeds is multiplied by 0, so skip the GPU work.
+    if (this.uniforms.uLevel.value <= 0) return
     if (this.sinceUpdate < 1 / Math.max(1, this.settings.fps) - 1e-4) return
     const step = this.sinceUpdate
     this.sinceUpdate = 0
@@ -425,7 +435,17 @@ export class AmbientEngine {
     // Same trick as three's Reflector: our offscreen passes must not be turned into XR views.
     gl.xr.enabled = false
     gl.shadowMap.autoUpdate = false
+    try {
+      this.runPasses(gl, t, step)
+    } finally {
+      // The renderer is the host's: always hand it back as we found it.
+      gl.setRenderTarget(prevTarget)
+      gl.xr.enabled = xrEnabled
+      gl.shadowMap.autoUpdate = shadowAuto
+    }
+  }
 
+  private runPasses(gl: THREE.WebGLRenderer, t: Targets, step: number) {
     const d = this.downsample.uniforms
     d.uSrc.value = this.video
     d.uStep.value.set(1 / W_MID / 4, 1 / H_MID / 4)
@@ -456,10 +476,6 @@ export class AmbientEngine {
       this.draw(gl, this.probeMat, t.probe)
       this.readProbe(gl, t.probe)
     }
-
-    gl.setRenderTarget(prevTarget)
-    gl.xr.enabled = xrEnabled
-    gl.shadowMap.autoUpdate = shadowAuto
   }
 
   private readProbe(gl: THREE.WebGLRenderer, target: THREE.WebGLRenderTarget) {
@@ -506,8 +522,12 @@ export class AmbientEngine {
       for (const target of Object.values(this.targets)) target.dispose()
       this.targets = null
     }
+    // Disposed three objects are rebuilt on next use, so a StrictMode remount keeps working.
+    for (const m of [this.downsample, this.blurMat, this.blendMat, this.probeMat]) m.dispose()
+    this.quad.geometry.dispose()
     this.uniforms.uGlow.value = null
     this.uniforms.uGlowSharp.value = null
     this.frames = 0
+    this.lastTime = null
   }
 }
