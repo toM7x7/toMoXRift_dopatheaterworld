@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ドパガキシネマ 設計書</title>
+<style>
+  :root { --ink:#1d3557; --bg:#f4f5f8; --card:#fff; --mute:#5b6475; --line:#d8dce5; --accent:#b4384c; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.7 "Noto Sans JP","Yu Gothic",Meiryo,sans-serif; }
+  header { padding:28px 32px 8px; }
+  h1 { margin:0 0 4px; font-size:26px; }
+  h2 { margin:0 0 10px; font-size:20px; border-left:6px solid var(--accent); padding-left:10px; }
+  h3 { margin:14px 0 6px; font-size:15px; color:var(--mute); }
+  .lead { color:var(--mute); max-width:980px; }
+  nav { display:flex; flex-wrap:wrap; gap:8px; padding:8px 32px 0; }
+  nav a { color:var(--ink); background:#e7eaf1; padding:4px 10px; border-radius:14px; text-decoration:none; font-size:13px; }
+  section { background:var(--card); margin:18px 32px; padding:20px 22px; border:1px solid var(--line); border-radius:10px; }
+  .row { display:grid; grid-template-columns: 1fr 1fr; gap:16px; align-items:start; }
+  .row3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; }
+  figure { margin:0; }
+  figure img { width:100%; border-radius:6px; border:1px solid var(--line); background:#fff; display:block; }
+  figcaption { font-size:12px; color:var(--mute); margin-top:4px; }
+  ul { margin:4px 0 0; padding-left:20px; }
+  li { margin:2px 0; }
+  table { border-collapse:collapse; width:100%; font-size:13px; }
+  th, td { border-bottom:1px solid var(--line); padding:5px 8px; text-align:left; vertical-align:top; }
+  .sw { display:inline-block; width:14px; height:14px; border:1px solid #888; vertical-align:-2px; margin-right:6px; border-radius:2px; }
+  code { background:#eef0f5; padding:0 4px; border-radius:3px; font-size:13px; }
+  @media (max-width: 900px) { .row, .row3 { grid-template-columns: 1fr; } section, header { margin-left:12px; margin-right:12px; } nav { padding-left:12px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>ドパガキシネマ 設計書</h1>
+  <div class="lead">部屋を6つの部位に分け、部位ごとに「見た目の案（画像生成）」と「寸法つきの設計図」をそろえた。寸法の正本は
+    <code>design/layout.json</code> と <code>blender/cinema_spec.py</code> で、設計図・Blender の組み立て・ワールドのコードが同じ数値を読む。
+    画像の案は雰囲気と作りの参考で、寸法は設計図が優先。</div>
+</header>
+<nav>
+  <a href="#all">全体</a><a href="#p1">P1 スクリーンまわり</a><a href="#p2">P2 横の壁</a><a href="#p3">P3 天井</a>
+  <a href="#p4">P4 床</a><a href="#p5">P5 座席</a><a href="#p6">P6 後ろ</a><a href="#mat">素材と光</a><a href="#build">組み立ての順番</a>
+</nav>
+
+<section id="all">
+  <h2>全体</h2>
+  <div class="row">
+    <figure><img src="concepts/overview-back.png" alt=""><figcaption>案：後ろの台から見た全景（映像の色が部屋に広がる）</figcaption></figure>
+    <figure><img src="concepts/overview-front.png" alt=""><figcaption>案：スクリーン前から客席と映写機を見る</figcaption></figure>
+  </div>
+  <h3>設計図</h3>
+  <div class="row">
+    <figure><img src="blueprints/bp-00-plan.svg" alt=""><figcaption>00 平面図</figcaption></figure>
+    <figure><img src="blueprints/bp-01-section.svg" alt=""><figcaption>01 縦断面図</figcaption></figure>
+  </div>
+  <h3>決めたこと</h3>
+  <ul>
+    <li>部屋 16 × 22 × 高さ 8。スクリーン 9.6 × 5.4（下端 1.2）。前 8 m は平らな舞台、11 m の斜面で 1.6 上がり、後ろ 3 m は平らな台。</li>
+    <li>座席 5 列 × 16 席＝80 席。左右 8 席ずつ、中央に幅 1.9 の通路。全席に座れる（<code>&lt;Seat&gt;</code>）。</li>
+    <li>当たり判定は今と同じ（床・斜面・台・壁・映写機の台）。座席・カーテン・柱は通り抜けられる（列や隅で詰まらないように）。</li>
+    <li>雰囲気：えんじのベルベット × 濃灰の布 × くるみ材のスラット × 真鍮 × 温かい間接照明。上映が始まると客電が落ち、映像の色が主役になる。</li>
+  </ul>
+  <figure style="margin-top:12px"><img src="concepts/prop-sheet.png" alt=""><figcaption>案：小物の一覧（座席・段差灯・壁の照明・壁パネル・カーテン・映写機・非常口サイン・黒枠の角）</figcaption></figure>
+</section>
+
+<section id="p1">
+  <h2>P1 スクリーンまわり（前の壁）</h2>
+  <div class="row">
+    <figure><img src="concepts/p1-screen-wall.png" alt=""><figcaption>案</figcaption></figure>
+    <figure><img src="blueprints/bp-p1-front.svg" alt=""><figcaption>正面図</figcaption></figure>
+  </div>
+  <div class="row">
+    <div><h3>決めたこと</h3><ul>
+      <li>黒ベルベットの枠（幅 0.35、壁から 0.16 出る）＋内側に真鍮の縁 0.025。</li>
+      <li>カーテンは隅（|x| 6.7〜8）でまとめ、真鍮の留め具で高さ 1.35 に留める。スクリーン横の後光の邪魔をしない。</li>
+      <li>上飾り（バランス）7.25〜8.0、ひだのピッチ 0.32。下端に真鍮の線、上端に間接照明。</li>
+      <li>壁は濃い布張り。後光（加算の板）はこの壁の手前に重なる。</li>
+    </ul></div>
+    <div><h3>Blender での作り方</h3><ul>
+      <li>枠＝4本の箱、縁＝4本の細い箱。カーテン＝ひだの格子メッシュを上から下へ「留めで細く・裾で少し広がる」形に変形。</li>
+      <li>上飾りはひだの帯（波形の格子）。留め具は真鍮の小さな円柱。</li>
+      <li>カーテン・上飾りは「ベルベット」（縁が明るむ見え方）で、映像の色を受ける。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="p2">
+  <h2>P2 横の壁</h2>
+  <div class="row">
+    <figure><img src="concepts/p2-side-wall.png" alt=""><figcaption>案（左：ふつうの区画／右：扉の区画）</figcaption></figure>
+    <figure><img src="blueprints/bp-p2-side.svg" alt=""><figcaption>立面図（左の壁を室内から）</figcaption></figure>
+  </div>
+  <div class="row">
+    <div><h3>決めたこと</h3><ul>
+      <li>付け柱（えんじのベルベット、幅 0.5・出 0.22）を 3.6 m おきに 6 本。天井の梁と位置をそろえる。</li>
+      <li>腰は木のスラット（幅 0.045・間隔 0.09）を床の傾きに沿って高さ 1.9。上端に真鍮の線。</li>
+      <li>その上は布パネル（1 区画に 3 枚、目地 0.04）を 7.0 まで。天井際は下がり天井 0.8 と間接照明の線。</li>
+      <li>真鍮の半円筒の壁照明を柱の床から 3.0 に。上向きに光り、上映中は暗くなる。</li>
+      <li>後ろの台の左右に両開きの扉（1.8 × 2.4、真鍮の枠）と緑の非常口サイン（走る人の絵だけ）。</li>
+    </ul></div>
+    <div><h3>Blender での作り方</h3><ul>
+      <li>区画の数・位置は <code>side_bays()</code> と <code>bay_panels()</code> から。左右の壁は同じ関数で鏡像。</li>
+      <li>スラットは 1 本ずつの細い箱（区画ごとに床の高さから上端の線まで）。布パネルは下辺が傾いた四角柱。</li>
+      <li>大きな面は 0.6 m 以下に分割（映像の光を頂点で計算するため）。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="p3">
+  <h2>P3 天井</h2>
+  <div class="row">
+    <figure><img src="concepts/p3-ceiling.png" alt=""><figcaption>案</figcaption></figure>
+    <figure><img src="blueprints/bp-p3-ceiling.svg" alt=""><figcaption>天井伏図（下から見上げ）</figcaption></figure>
+  </div>
+  <div class="row">
+    <div><h3>決めたこと</h3><ul>
+      <li>横向きの梁（幅 0.4・深さ 0.5）を柱の位置に 6 本。梁の両脇の天井際に間接照明の線。</li>
+      <li>壁際は下がり天井（幅 0.9・下がり 0.8）。内側の下端に連続した光の線。</li>
+      <li>梁の間にダウンライトを 3 つずつ。全景案の格子天井より、部位案のすっきりした梁を採用。</li>
+    </ul></div>
+    <div><h3>Blender での作り方</h3><ul>
+      <li>天井の面・下がり天井・梁は箱。光の線は 0.025 角の細い箱（光る素材）。</li>
+      <li>ダウンライトは小さな円盤（光る素材）。客電と一緒に 25% まで落ちる。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="p4">
+  <h2>P4 床</h2>
+  <div class="row">
+    <figure><img src="concepts/p4-floor.png" alt=""><figcaption>案（右：じゅうたんの柄と段差灯の寄り）</figcaption></figure>
+    <figure><img src="blueprints/bp-p4-floor.svg" alt=""><figcaption>床の仕上げ</figcaption></figure>
+  </div>
+  <div class="row">
+    <div><h3>決めたこと</h3><ul>
+      <li>前 8 m はつやのある黒い舞台（スクリーンと後光が映り込む）。客席側との境に真鍮の見切り 0.05。</li>
+      <li>じゅうたんはえんじ地に金と青緑のひし形・点の柄（0.6 m 角の繰り返し）。画像ではなくシェーダーで描く。</li>
+      <li>通路の両端に真鍮枠の段差灯（0.16 × 0.07）を 1.1 m おき。斜面と後ろの台だけ。</li>
+    </ul></div>
+    <div><h3>Blender での作り方</h3><ul>
+      <li>床は斜面に沿った面を 0.5 m おきに分割。見切りと段差灯は小さな箱。</li>
+      <li>当たり判定は今のコード側の箱のまま（見た目の床と同じ寸法）。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="p5">
+  <h2>P5 座席</h2>
+  <div class="row">
+    <figure><img src="concepts/p5-seat.png" alt=""><figcaption>案（1 脚の三面と、肘掛けを共有する 3 連）</figcaption></figure>
+    <figure><img src="blueprints/bp-p5-seat.svg" alt=""><figcaption>詳細図</figcaption></figure>
+  </div>
+  <div class="row">
+    <div><h3>決めたこと</h3><ul>
+      <li>座面の上 0.49、背もたれの上 1.12（12° 後ろへ傾ける）、幅 0.52、座席の間隔 0.66。</li>
+      <li>肘掛けは隣と共有（列ごとに 9 本）。濃灰の布の天板＋真鍮の縁＋前寄りに真鍮のカップホルダー。脚は濃灰の金属の側板。</li>
+      <li>列の端の側板はくるみ材。</li>
+      <li>80 席すべて座れる。座る判定は座面の上の見えない箱。誰かが座っている席は座れない。</li>
+    </ul></div>
+    <div><h3>Blender での作り方</h3><ul>
+      <li>座席 1 脚（<code>SeatProto</code>）と肘掛け 1 本（<code>ArmProto</code>）だけ作る。並べるのはワールド側（インスタンス描画で 1 素材 1 回）。</li>
+      <li>背もたれと座面は角を丸めた箱。カップホルダーは真鍮の輪＋暗い底。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="p6">
+  <h2>P6 後ろ（映写機と後ろの壁）</h2>
+  <div class="row">
+    <figure><img src="concepts/p6-back.png" alt=""><figcaption>案</figcaption></figure>
+    <figure><img src="blueprints/bp-p6-back.svg" alt=""><figcaption>正面図</figcaption></figure>
+  </div>
+  <div class="row">
+    <div><h3>決めたこと</h3><ul>
+      <li>映写機：本体 0.42 × 0.42 × 0.62、フィルムリール 2 枚（半径 0.28）、レンズは台の中心から前へ 0.65・台から高さ 1.75。</li>
+      <li>台は布張り＋真鍮の天板の縁＋黒い台座。触ると自分の見え方だけ光の強さを切替（今と同じ）。</li>
+      <li>後ろの壁の上に真鍮枠の映写窓 2 つ（奥がほのかに光る）。左右に木のスラットの帯。</li>
+    </ul></div>
+    <div><h3>Blender での作り方</h3><ul>
+      <li>映写機は部屋とは別のまとまり（<code>Projector</code>）で書き出し、ワールドで触れる物にする。レンズの円盤（<code>Projector_Lens</code>）は映像の平均色で光らせる。</li>
+      <li>リールはスポーク付きの円盤、本体は箱＋細かい部品をいくつか。</li>
+    </ul></div>
+  </div>
+</section>
+
+<section id="mat">
+  <h2>素材と光（ワールドでの扱い）</h2>
+  <table>
+    <tr><th>Blender の素材名</th><th>色</th><th>ワールドでの見え方</th></tr>
+    <tr><td><code>AC_wall_fabric</code> / <code>AC_front_fabric</code></td><td><span class="sw" style="background:#3a3844"></span>濃灰の布</td><td>映像の光を受ける・映像を壁へ広げる（横・後ろの壁）</td></tr>
+    <tr><td><code>AC_wood</code></td><td><span class="sw" style="background:#5b3b27"></span>くるみ材</td><td>映像の光を受ける・映像を広げる・ごく弱い映り込み</td></tr>
+    <tr><td><code>AC_brass</code></td><td><span class="sw" style="background:#b48c4c"></span>真鍮</td><td>金属：スクリーンと後光を色つきで映す</td></tr>
+    <tr><td><code>AC_curtain</code></td><td><span class="sw" style="background:#6a1420"></span>えんじのベルベット</td><td>縁が明るむベルベット（柱・カーテン・上飾り）</td></tr>
+    <tr><td><code>AC_seat_velvet</code> / <code>AC_seat_frame</code></td><td><span class="sw" style="background:#7a1c2a"></span><span class="sw" style="background:#1f1e24"></span></td><td>座席（ベルベット／濃灰の金属）</td></tr>
+    <tr><td><code>AC_stage</code></td><td><span class="sw" style="background:#141217"></span>つやのある黒</td><td>映り込み強め・映像を広げる</td></tr>
+    <tr><td><code>AC_carpet</code></td><td><span class="sw" style="background:#3a2630"></span>えんじ</td><td>ひし形と点の柄（シェーダー）・映り込み弱め</td></tr>
+    <tr><td><code>AC_ceiling</code> / <code>AC_beam</code></td><td><span class="sw" style="background:#26252b"></span></td><td>映像の光を受ける・映像を広げる</td></tr>
+    <tr><td><code>AC_glow_*</code></td><td><span class="sw" style="background:#ffb46a"></span><span class="sw" style="background:#18d36a"></span></td><td>光る素材。間接照明・ダウンライト・壁の照明は上映中に暗くなる。段差灯と非常口は常に点く</td></tr>
+  </table>
+</section>
+
+<section id="build">
+  <h2>組み立ての順番</h2>
+  <ul>
+    <li>Blender（<code>blender/build_cinema.py</code>）：別シーン <code>ambient_cinema</code> に P1〜P6 を組み、素材ごとに 1 つのメッシュへまとめて <code>public/ambient-cinema.glb</code> に書き出す。座席・肘掛け・映写機は別のまとまり。</li>
+    <li>ワールド：GLB を読み、素材名で映像の光のシェーダーに差し替える。座席は 80 脚をインスタンスで並べ、各席に <code>&lt;Seat&gt;</code>。</li>
+    <li>確認：テスト映像で見た目、座れること、重さ（描画回数・頂点数）を見る。そのあと v3 としてアップロード。</li>
+  </ul>
+</section>
+</body>
+</html>

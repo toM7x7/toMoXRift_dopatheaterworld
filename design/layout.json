@@ -1,0 +1,92 @@
+{
+  "_note": "Single source of truth for room dimensions (meters, three.js axes: +Y up, -Z toward the screen). Read by src/layout.ts, blender/cinema_spec.py and design/blueprints.py.",
+  "room": {
+    "halfWidth": 8,
+    "front": -11,
+    "back": 11,
+    "height": 8
+  },
+  "rake": {
+    "start": -3,
+    "end": 8,
+    "rise": 1.6
+  },
+  "screen": {
+    "center": [
+      0,
+      3.9,
+      -10.88
+    ],
+    "width": 9.6,
+    "height": 5.4
+  },
+  "projector": {
+    "base": [
+      0,
+      1.6,
+      10.1
+    ],
+    "lensHeight": 1.75,
+    "lensForward": 0.65
+  },
+  "spawn": [
+    1.6,
+    1.6,
+    9.0
+  ],
+  "seats": {
+    "rows": [
+      -1.6,
+      0.4,
+      2.4,
+      4.4,
+      6.4
+    ],
+    "perSide": 8,
+    "pitch": 0.66,
+    "aisleHalf": 0.95,
+    "firstOffset": 0.36,
+    "rowDepthOffset": 0.3,
+    "cushionTop": 0.49,
+    "seatWidth": 0.52,
+    "backTop": 1.12
+  },
+  "bays": {
+    "pilasterZ": [
+      -9.4,
+      -5.8,
+      -2.2,
+      1.4,
+      5.0,
+      8.6
+    ],
+    "pilasterWidth": 0.5,
+    "pilasterDepth": 0.22,
+    "wainscotHeight": 1.9,
+    "panelTop": 7.0,
+    "sconceHeight": 3.0
+  },
+  "doors": {
+    "z": 9.9,
+    "width": 1.8,
+    "height": 2.4,
+    "signHeight": 0.35
+  },
+  "ceiling": {
+    "soffitWidth": 0.9,
+    "soffitDrop": 0.8,
+    "beamDepth": 0.5,
+    "beamWidth": 0.4,
+    "longBeamX": [],
+    "_beams": "transverse beams only, aligned with the pilasters (concept p3-ceiling)"
+  },
+  "screenWall": {
+    "maskWidth": 0.35,
+    "curtainInner": 6.7,
+    "curtainTop": 7.25,
+    "valanceBottom": 7.25
+  },
+  "aisleLights": {
+    "pitch": 1.1
+  }
+}

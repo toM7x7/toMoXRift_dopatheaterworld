@@ -1,0 +1,9 @@
+{
+  "id": "8a753c91-e237-4076-bc25-2fc49c079850",
+  "responseKeys": [
+    "id",
+    "ownerId",
+    "createdAt",
+    "updatedAt"
+  ]
+}

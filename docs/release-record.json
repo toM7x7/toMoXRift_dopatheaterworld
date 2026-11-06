@@ -1,0 +1,21 @@
+{
+  "id": "8a753c91-e237-4076-bc25-2fc49c079850",
+  "title": "ドパガキシネマ｜DOPAGAKI CINEMA（試作）",
+  "version": 5,
+  "contentHash": "d624eb25e801",
+  "uploadedAt": "2026-11-07",
+  "cliVersion": "latest (npx @xrift/cli@latest, 2026-11-07)",
+  "securityCheck": "APPROVE 29/29 (latest CLI)",
+  "cdnBase": "https://assets.xrift.net/users/d84d700c-6b11-4497-8f2d-9abd4323e598/worlds/8a753c91-e237-4076-bc25-2fc49c079850/d624eb25e801/",
+  "remoteEntryMatchesLocal": true,
+  "thumbnailMatchesLocal": true,
+  "glbMatchesLocal": true,
+  "worldChunkMatchesLocal": true,
+  "apiReadback": "GET /api/public/v1/worlds/<id> returned 404 even with CLI auth; verified on the CDN instead",
+  "thumbnailSource": "docs/screenshots/thumbnail-v3-2026-11-06.png (scripts/capture.mjs thumb-neon)",
+  "changes": "v5: the room dissolve follows the share, not the picture. Dissolves 2 s after the picture arrives (5 s sweep), stays through stalls/buffering/freezes, a share gap under 3 s keeps it (light held on the last colours, screen black), share gone for 3 s brings the room back (3 s). Seats dissolve fully; the projector never dissolves. Peak/excitement scoring removed. Verified with scripts/check-show.mjs.",
+  "previous": {
+    "version": 4,
+    "contentHash": "73f583e647c4"
+  }
+}
