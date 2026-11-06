@@ -1,21 +1,20 @@
 {
   "id": "8a753c91-e237-4076-bc25-2fc49c079850",
   "title": "ドパガキシネマ｜DOPAGAKI CINEMA（試作）",
-  "version": 5,
-  "contentHash": "d624eb25e801",
+  "version": 6,
+  "contentHash": "6cd8998e3605",
   "uploadedAt": "2026-11-07",
   "cliVersion": "latest (npx @xrift/cli@latest, 2026-11-07)",
   "securityCheck": "APPROVE 29/29 (latest CLI)",
-  "cdnBase": "https://assets.xrift.net/users/d84d700c-6b11-4497-8f2d-9abd4323e598/worlds/8a753c91-e237-4076-bc25-2fc49c079850/d624eb25e801/",
-  "remoteEntryMatchesLocal": true,
-  "thumbnailMatchesLocal": true,
-  "glbMatchesLocal": true,
-  "worldChunkMatchesLocal": true,
+  "cdnBase": "https://assets.xrift.net/users/d84d700c-6b11-4497-8f2d-9abd4323e598/worlds/8a753c91-e237-4076-bc25-2fc49c079850/6cd8998e3605/",
+  "cdnFilesMatchLocal": "31/31 uploaded files (remoteEntry, World chunk, GLB, thumbnail, ...); __federation_shared_* chunks are provided by the host and not on the CDN",
   "apiReadback": "GET /api/public/v1/worlds/<id> returned 404 even with CLI auth; verified on the CDN instead",
-  "thumbnailSource": "docs/screenshots/thumbnail-v3-2026-11-06.png (scripts/capture.mjs thumb-neon)",
-  "changes": "v5: the room dissolve follows the share, not the picture. Dissolves 2 s after the picture arrives (5 s sweep), stays through stalls/buffering/freezes, a share gap under 3 s keeps it (light held on the last colours, screen black), share gone for 3 s brings the room back (3 s). Seats dissolve fully; the projector never dissolves. Peak/excitement scoring removed. Verified with scripts/check-show.mjs.",
+  "thumbnailSource": "docs/screenshots/thumbnail-source-{before,after}-2026-11-07.png (scripts/capture-thumb-pair.mjs: same camera, dissolve pinned 0 / 1 a few frames apart) composed by scripts/compose_thumbnail.py into docs/screenshots/thumbnail-v6-2026-11-07.png = public/thumbnail.png",
+  "thumbnailCopy": "DOPAGAKI CINEMA / ドパガキシネマ / 上映が始まると、部屋が映像に溶ける / chips 上映前・上映中",
+  "changes": "v6: new thumbnail only (diagonal before/after split of the same frame showing the share-driven dissolve). World code unchanged from v5.",
+  "github": "https://github.com/toM7x7/toMoXRift_dopatheaterworld",
   "previous": {
-    "version": 4,
-    "contentHash": "73f583e647c4"
+    "version": 5,
+    "contentHash": "d624eb25e801"
   }
 }

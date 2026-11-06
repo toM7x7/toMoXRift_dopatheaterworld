@@ -29,6 +29,10 @@ const SHOTS = {
   'idle-dust': { q: 'cam=-0.7,2.0,3.2,0,3.3,-11', idle: true },
   'thumb-neon': { q: 'scene=3&nofakes&cam=6.4,2.6,1.5,-1.5,3.0,-9' },
   'thumb-sunset': { q: 'scene=0&nofakes&cam=-0.7,2.0,3.2,0,3.3,-11' },
+  // v6 thumbnail: one camera, the cinema with the picture on vs. dissolved during the show.
+  'thumb-before': { q: 'scene=3&nofakes&immerse=-1&cam=6.4,2.6,1.5,-1.5,3.0,-9', wait: 4000 },
+  'thumb-mid': { q: 'scene=3&nofakes&cam=6.4,2.6,1.5,-1.5,3.0,-9', hold: 0.5, wait: 4000 },
+  'thumb-after': { q: 'scene=3&nofakes&immerse=1&cam=6.4,2.6,1.5,-1.5,3.0,-9', wait: 9000 },
 }
 
 const names = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(SHOTS)
