@@ -76,5 +76,6 @@ URL の指定は `src/dev.tsx` の先頭に書いてある（`?play=1&scene=2` �
 - v3（2026-11-06）: contentHash `a1d0c5a1de1d`。Blender で作り直した部屋と座れる 80 席。GLB・サムネイル・remoteEntry が配信サーバーと一致。
 - v2（2026-11-06）: contentHash `d12909cd6715`。後光を強く、映像を壁・天井・床へ広げ、ほこりは待機中だけに。配信サーバーのファイルが手元のビルドと一致。
 - v1（2026-11-06）: ワールド ID `8a753c91-e237-4076-bc25-2fc49c079850`、contentHash `5b85a9b6bfbe`。配信サーバーの `remoteEntry.js` とサムネイルが手元のビルドと一致（`docs/release-record.json`、ログは `docs/upload-v1.log`）。
+- GitHub: https://github.com/toM7x7/toMoXRift_dopatheaterworld （`main`。`.xrift/` はワールド ID の手元メモなので入れていない。ID は上と `docs/release-record.json` にある）
 - サムネイルは `scripts/capture.mjs thumb-neon` で撮った実際の画面（開発用の観客の人形は外してある）。
 - 新規登録は `node scripts/register-world.mjs`、アップロードは `npx @xrift/cli@latest upload world --verbose`。
