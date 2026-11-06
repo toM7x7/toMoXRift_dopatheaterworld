@@ -1,20 +1,20 @@
 {
   "id": "8a753c91-e237-4076-bc25-2fc49c079850",
-  "title": "ドパガキシネマ｜DOPAGAKI CINEMA（試作）",
-  "version": 8,
-  "contentHash": "f4157977a788",
+  "title": "ドパドバシネマ｜DOPADOBA CINEMA",
+  "version": 9,
+  "contentHash": "a3ef1c74335f",
   "uploadedAt": "2026-11-07",
   "cliVersion": "latest (npx @xrift/cli@latest, 2026-11-07)",
   "securityCheck": "APPROVE 29/29 (latest CLI)",
-  "cdnBase": "https://assets.xrift.net/users/d84d700c-6b11-4497-8f2d-9abd4323e598/worlds/8a753c91-e237-4076-bc25-2fc49c079850/f4157977a788/",
+  "cdnBase": "https://assets.xrift.net/users/d84d700c-6b11-4497-8f2d-9abd4323e598/worlds/8a753c91-e237-4076-bc25-2fc49c079850/a3ef1c74335f/",
   "cdnFilesMatchLocal": "31/31 uploaded files (remoteEntry, World chunk, GLB, thumbnail, ...); __federation_shared_* chunks are provided by the host and not on the CDN",
   "apiReadback": "GET /api/public/v1/worlds/<id> returned 404 even with CLI auth; verified on the CDN instead",
-  "thumbnailSource": "docs/screenshots/thumbnail-source-{before,after}-back-2026-11-07.png (scripts/capture-thumb-pair.mjs back: one back-of-room camera, before = no share / house lights, after = share on, dissolve pinned 1) composed by scripts/compose_thumbnail.py into docs/screenshots/thumbnail-v7-2026-11-07.png = public/thumbnail.png",
-  "thumbnailCopy": "DOPAGAKI CINEMA / ドパガキシネマ / 上映が始まると、部屋が映像に溶ける / chips 上映前・上映中",
-  "changes": "v8: fixes from the external review (Codex CLI code review, Antigravity CLI Japanese check). Ended video track with the element kept is treated like the share ending (black screen, 3 s grace, room returns); a stream with no video track is not a share; the grace counts real time; offscreen passes wrapped in try/finally; passes and the beam skip at level off; engine materials/geometry disposed; StrictMode-safe material cleanup; reversed smoothstep fixed. Wording: description (選んで, subject added, projector location), idle screen text, projector label 光の強さ. Thumbnail unchanged from v7.",
+  "thumbnailSource": "docs/screenshots/thumbnail-source-{before,after}-back-2026-11-07.png (scripts/capture-thumb-pair.mjs back: one back-of-room camera, before = no share / house lights, after = share on, dissolve pinned 1) composed by scripts/compose_thumbnail.py into docs/screenshots/thumbnail-v9-2026-11-07.png = public/thumbnail.png",
+  "thumbnailCopy": "DOPADOBA CINEMA / ドパドバシネマ / 上映が始まると、部屋が映像に溶ける / chips 上映前・上映中",
+  "changes": "v9: renamed from ドパガキシネマ（試作） to ドパドバシネマ｜DOPADOBA CINEMA (ドパガキ read as too much of a meme; 試作 dropped). Description rewritten around the controls: 【上映する】【座る】【光の強さ】. Thumbnail recomposed from the v7 captures with the new title. World code unchanged from v8 apart from the dev panel label.",
   "github": "https://github.com/toM7x7/toMoXRift_dopatheaterworld",
   "previous": {
-    "version": 7,
-    "contentHash": "8e241cb88325"
+    "version": 8,
+    "contentHash": "f4157977a788"
   }
 }
