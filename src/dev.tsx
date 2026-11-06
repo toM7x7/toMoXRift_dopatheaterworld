@@ -206,7 +206,7 @@ function DevPanel({ settings, onChange, share }: PanelProps) {
   return (
     <div style={panelStyle} onPointerDown={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ fontSize: 11, letterSpacing: '.12em', color: '#d9c9a3', flex: 1 }}>DOPAGAKI CINEMA · DEV</div>
+        <div style={{ fontSize: 11, letterSpacing: '.12em', color: '#d9c9a3', flex: 1 }}>DOPADOBA CINEMA · DEV</div>
         <button style={{ ...btn, flex: 'none', padding: '2px 8px' }} onClick={() => setOpen(!open)}>{open ? '閉じる' : '開く'}</button>
       </div>
       <div style={{ fontSize: 12, margin: '4px 0 6px' }}>

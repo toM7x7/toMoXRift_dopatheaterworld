@@ -6,7 +6,7 @@ A straight white divider with a slider handle marks the boundary.
 
 Usage: python scripts/compose_thumbnail.py [LABEL] [DATE]
   sources: docs/screenshots/thumbnail-source-{before,after}-LABEL-DATE.png (scripts/capture-thumb-pair.mjs)
-  writes:  docs/screenshots/thumbnail-v7-DATE.png and public/thumbnail.png
+  writes:  docs/screenshots/thumbnail-v9-DATE.png and public/thumbnail.png
 """
 import sys
 from pathlib import Path
@@ -22,8 +22,8 @@ SPLIT = W // 2
 FONT = Path('C:/Windows/Fonts/NotoSansJP-VF.ttf')
 FALLBACK = Path('C:/Windows/Fonts/YuGothB.ttc')
 
-TITLE = 'ドパガキシネマ'
-TITLE_EN = 'DOPAGAKI CINEMA'
+TITLE = 'ドパドバシネマ'
+TITLE_EN = 'DOPADOBA CINEMA'
 HOOK = '上映が始まると、部屋が映像に溶ける'
 LABEL_BEFORE = '上映前'
 LABEL_AFTER = '上映中'
@@ -119,7 +119,7 @@ def main():
     img = title_block(img)
 
     out = img.convert('RGB')
-    work = SHOTS / f'thumbnail-v7-{DATE}.png'
+    work = SHOTS / f'thumbnail-v9-{DATE}.png'
     out.save(work, optimize=True)
     out.save(ROOT / 'public' / 'thumbnail.png', optimize=True)
     print(work)

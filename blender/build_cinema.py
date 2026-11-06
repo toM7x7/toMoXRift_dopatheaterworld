@@ -1,4 +1,4 @@
-"""Build the Dopagaki Cinema room in Blender from cinema_spec and export public/ambient-cinema.glb.
+"""Build the Dopadoba Cinema room in Blender from cinema_spec and export public/ambient-cinema.glb.
 
 Run inside Blender (MCP):  exec(open(r'.../blender/build_cinema.py', encoding='utf-8').read())
 Builds into its own scene 'ambient_cinema' (the user's other scenes are untouched).

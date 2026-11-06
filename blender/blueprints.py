@@ -43,7 +43,7 @@ class Sheet:
                 f'<path d="M0,1 L10,5 L0,9 z" fill="{INK}"/></marker></defs>')
         frame = (f'<rect x="10" y="10" width="{self.w - 20}" height="{self.h - 20}" fill="none" stroke="{INK}" stroke-width="1.5"/>'
                  f'<rect x="{self.w - 600}" y="{self.h - 70}" width="590" height="60" fill="#fff" stroke="{INK}"/>'
-                 f'<text x="{self.w - 590}" y="{self.h - 46}" font-size="16" fill="{INK}" font-weight="bold">ドパガキシネマ　{self.title}</text>'
+                 f'<text x="{self.w - 590}" y="{self.h - 46}" font-size="16" fill="{INK}" font-weight="bold">ドパドバシネマ　{self.title}</text>'
                  f'<text x="{self.w - 590}" y="{self.h - 22}" font-size="12" fill="{INK}">単位 m ／ 寸法の正本 design/layout.json ＋ blender/cinema_spec.py</text>')
         with open(os.path.join(OUT, self.name + '.svg'), 'w', encoding='utf-8') as f:
             f.write(head + ''.join(self.items) + frame + '</svg>')
