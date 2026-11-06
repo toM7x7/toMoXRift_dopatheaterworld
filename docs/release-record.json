@@ -1,20 +1,20 @@
 {
   "id": "8a753c91-e237-4076-bc25-2fc49c079850",
   "title": "ドパガキシネマ｜DOPAGAKI CINEMA（試作）",
-  "version": 6,
-  "contentHash": "6cd8998e3605",
+  "version": 7,
+  "contentHash": "8e241cb88325",
   "uploadedAt": "2026-11-07",
   "cliVersion": "latest (npx @xrift/cli@latest, 2026-11-07)",
   "securityCheck": "APPROVE 29/29 (latest CLI)",
-  "cdnBase": "https://assets.xrift.net/users/d84d700c-6b11-4497-8f2d-9abd4323e598/worlds/8a753c91-e237-4076-bc25-2fc49c079850/6cd8998e3605/",
+  "cdnBase": "https://assets.xrift.net/users/d84d700c-6b11-4497-8f2d-9abd4323e598/worlds/8a753c91-e237-4076-bc25-2fc49c079850/8e241cb88325/",
   "cdnFilesMatchLocal": "31/31 uploaded files (remoteEntry, World chunk, GLB, thumbnail, ...); __federation_shared_* chunks are provided by the host and not on the CDN",
   "apiReadback": "GET /api/public/v1/worlds/<id> returned 404 even with CLI auth; verified on the CDN instead",
-  "thumbnailSource": "docs/screenshots/thumbnail-source-{before,after}-2026-11-07.png (scripts/capture-thumb-pair.mjs: same camera, dissolve pinned 0 / 1 a few frames apart) composed by scripts/compose_thumbnail.py into docs/screenshots/thumbnail-v6-2026-11-07.png = public/thumbnail.png",
+  "thumbnailSource": "docs/screenshots/thumbnail-source-{before,after}-back-2026-11-07.png (scripts/capture-thumb-pair.mjs back: one back-of-room camera, before = no share / house lights, after = share on, dissolve pinned 1) composed by scripts/compose_thumbnail.py into docs/screenshots/thumbnail-v7-2026-11-07.png = public/thumbnail.png",
   "thumbnailCopy": "DOPAGAKI CINEMA / ドパガキシネマ / 上映が始まると、部屋が映像に溶ける / chips 上映前・上映中",
-  "changes": "v6: new thumbnail only (diagonal before/after split of the same frame showing the share-driven dissolve). World code unchanged from v5.",
+  "changes": "v7: thumbnail only. User feedback on v6: the split line and the difference were not visible. Now a before/after slider from the back of the room: left half the idle cinema (house lights, curtains, all seats), right half during the show (empty room of light), straight white divider with a handle. World code unchanged from v5.",
   "github": "https://github.com/toM7x7/toMoXRift_dopatheaterworld",
   "previous": {
-    "version": 5,
-    "contentHash": "d624eb25e801"
+    "version": 6,
+    "contentHash": "6cd8998e3605"
   }
 }

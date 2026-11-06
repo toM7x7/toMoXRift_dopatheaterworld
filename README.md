@@ -71,6 +71,7 @@ URL の指定は `src/dev.tsx` の先頭に書いてある（`?play=1&scene=2` �
 
 ## アップロード
 
+- v7（2026-11-07）: contentHash `8e241cb88325`。サムネイルを作り直し（v6 は境目と違いが分かりにくいと指摘）。後ろの席から見た同じ画面を左右に分け、左は上映前（客電・カーテン・座席）、右は上映中（座席まで消えた光の部屋）、白い境目に取っ手。上げたファイル31個が配信サーバーと一致。
 - v6（2026-11-07）: contentHash `6cd8998e3605`。サムネイルだけ差し替え（同じ画面の上映前と上映中を斜めに合わせ、部屋が消える演出を見せる）。上げたファイル31個が配信サーバーと一致。
 - v5（2026-11-07）: contentHash `d624eb25e801`。部屋が消えるのを映像の盛り上がりでなく共有の有無で決める（止まりかけてもちらつかない）。座席も消え、映写機は残す。remoteEntry・World のチャンク・GLB・サムネイルが配信サーバーと一致。
 - v4（2026-11-06）: contentHash `73f583e647c4`。名前を「ドパガキシネマ」に。盛り上がると部屋が光に溶けて消える演出。
@@ -78,5 +79,5 @@ URL の指定は `src/dev.tsx` の先頭に書いてある（`?play=1&scene=2` �
 - v2（2026-11-06）: contentHash `d12909cd6715`。後光を強く、映像を壁・天井・床へ広げ、ほこりは待機中だけに。配信サーバーのファイルが手元のビルドと一致。
 - v1（2026-11-06）: ワールド ID `8a753c91-e237-4076-bc25-2fc49c079850`、contentHash `5b85a9b6bfbe`。配信サーバーの `remoteEntry.js` とサムネイルが手元のビルドと一致（`docs/release-record.json`、ログは `docs/upload-v1.log`）。
 - GitHub: https://github.com/toM7x7/toMoXRift_dopatheaterworld （`main`。`.xrift/` はワールド ID の手元メモなので入れていない。ID は上と `docs/release-record.json` にある）
-- サムネイル（v6〜）は実際の画面2枚の合成。`node scripts/capture-thumb-pair.mjs` が同じカメラ・ほぼ同じ映像のコマで、消え具合 0（上映前）と 1（上映中）を撮り（`docs/screenshots/thumbnail-source-*`）、`python scripts/compose_thumbnail.py <日付>` が斜めの境目（実際の崩れと同じくスクリーン側から客席へ）と文字を重ねて `public/thumbnail.png` に書く。開発用の観客の人形は外してある。v3〜v5 は `scripts/capture.mjs thumb-neon` の1枚。
+- サムネイル（v7〜）は実際の画面2枚の合成。`node scripts/capture-thumb-pair.mjs back` が後ろの席の同じカメラで、共有前（客電）と共有中（消え具合を 1 に固定）を1ページで撮り（`docs/screenshots/thumbnail-source-*-back-*`）、`python scripts/compose_thumbnail.py back <日付>` が左半分を上映前・右半分を上映中にして白い境目と文字を重ね、`public/thumbnail.png` に書く。開発用の観客の人形は外してある。v6 は斜めの境目の合成、v3〜v5 は `scripts/capture.mjs thumb-neon` の1枚。
 - 新規登録は `node scripts/register-world.mjs`、アップロードは `npx @xrift/cli@latest upload world --verbose`。
